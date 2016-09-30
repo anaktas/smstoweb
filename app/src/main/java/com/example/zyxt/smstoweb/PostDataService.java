@@ -119,7 +119,7 @@ public class PostDataService extends IntentService {
             @Override
             public void run() {
                 try {
-                    URL url = new URL("http://galaelass.gr/ordering/ordering.php");
+                    URL url = new URL("http://services1.galaelass.gr/ordering/ordering.php");
 
                     HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
@@ -152,7 +152,10 @@ public class PostDataService extends IntentService {
                 }
             }
         }).start();*/
-
+        Log.d("DEBUG", "Number: "+number);
+        Log.d("DEBUG", "Order Type: "+orderType);
+        Log.d("DEBUG", "Quantity: "+quantity);
+        Log.d("DEBUG", "Inside postData()");
         SenPostReqAsyncTask senPostReqAsyncTask = new SenPostReqAsyncTask();
         senPostReqAsyncTask.execute(number, orderType, quantity);
     }

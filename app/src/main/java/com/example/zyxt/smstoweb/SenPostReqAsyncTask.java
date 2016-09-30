@@ -28,6 +28,7 @@ public class SenPostReqAsyncTask extends AsyncTask<String, Void, String> {
             @Override
             public void run() {
                 try {
+                    Log.d("DEBUG", "Inside backgroundWorker...");
                     URL url = new URL("http://services1.galaelass.gr/ordering/ordering.php");
 
                     HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -53,7 +54,7 @@ public class SenPostReqAsyncTask extends AsyncTask<String, Void, String> {
                     writer.write(getQuery(values));
                     writer.flush();
                     writer.close();
-
+                    Log.d("DEBUG", "We send the data.");
                     conn.disconnect();
                 } catch(IOException e) {
                     Log.d("DEBUG", e.toString());
