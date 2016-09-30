@@ -39,17 +39,22 @@ public class SMSReceiver extends BroadcastReceiver {
                     messages[i] = SmsMessage.createFromPdu((byte[]) pdusObj[i], format);
                     strNumber = messages[i].getOriginatingAddress();
                     strMessage = messages[i].getMessageBody();
+                    Log.d("DEBUG", "Raw message: " + strMessage);
                     messageArray = strMessage.split(" ");
                     identifier = messageArray[0];
                     orderType = messageArray[1];
                     quantity = messageArray[2];
+                    Log.d("DEBUG", "Identifier: " + identifier);
+                    Log.d("DEBUG", "Number: " + strNumber);
+                    Log.d("DEBUG", "Order Type: " + orderType);
+                    Log.d("DEBUG", "Quantity: " + quantity);
                 }
 
                 if (identifier.equals("AB")) {
                     Intent intentToResponse = new Intent(context, PostDataService.class);
-                    intentToResponse.putExtra(PostDataService.INCOMING_NUMBER, strNumber);
-                    intentToResponse.putExtra(PostDataService.ORDER_TYPE, orderType);
-                    intentToResponse.putExtra(PostDataService.QUANTITY, quantity);
+                    intentToResponse.putExtra("incomingNumber", strNumber);
+                    intentToResponse.putExtra("orderType", orderType);
+                    intentToResponse.putExtra("quantity", quantity);
                     context.startService(intentToResponse);
 
                     Log.d("DEBUG", "The service was triggered");

@@ -34,10 +34,6 @@ public class PostDataService extends IntentService {
     private static final String EXTRA_PARAM1 = "com.example.zyxt.smstoweb.extra.PARAM1";
     private static final String EXTRA_PARAM2 = "com.example.zyxt.smstoweb.extra.PARAM2";
 
-    public static final String INCOMING_NUMBER = "";
-    public static final String ORDER_TYPE = "";
-    public static final String QUANTITY = "";
-
     public PostDataService() {
         super("PostDataService");
     }
@@ -86,11 +82,15 @@ public class PostDataService extends IntentService {
                 handleActionBaz(param1, param2);
             }
 
-            final String number = intent.getStringExtra(INCOMING_NUMBER);
-            final String orderType = intent.getStringExtra(ORDER_TYPE);
-            final String quantity = intent.getStringExtra(QUANTITY);
+            String number = intent.getStringExtra("incomingNumber");
+            String orderType = intent.getStringExtra("orderType");
+            String quantity = intent.getStringExtra("quantity");
 
             Log.d("DEBUG", "Handling the intent from the service");
+            Log.d("DEBUG", "HI Number: " + number);
+            Log.d("DEBUG", "HI Order Type: " + orderType);
+            Log.d("DEBUG", "HI Quantity: " + quantity);
+            Log.d("DEBUG", "HI Inside postData()");
 
             postData(number, orderType, quantity);
         }
@@ -152,9 +152,9 @@ public class PostDataService extends IntentService {
                 }
             }
         }).start();*/
-        Log.d("DEBUG", "Number: "+number);
-        Log.d("DEBUG", "Order Type: "+orderType);
-        Log.d("DEBUG", "Quantity: "+quantity);
+        Log.d("DEBUG", "P Number: " + number);
+        Log.d("DEBUG", "P Order Type: " + orderType);
+        Log.d("DEBUG", "P Quantity: " + quantity);
         Log.d("DEBUG", "Inside postData()");
         SenPostReqAsyncTask senPostReqAsyncTask = new SenPostReqAsyncTask();
         senPostReqAsyncTask.execute(number, orderType, quantity);
