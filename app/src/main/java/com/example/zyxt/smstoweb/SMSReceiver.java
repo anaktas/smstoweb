@@ -51,12 +51,13 @@ public class SMSReceiver extends BroadcastReceiver {
                     intentToResponse.putExtra(PostDataService.ORDER_TYPE, orderType);
                     intentToResponse.putExtra(PostDataService.QUANTITY, quantity);
                     context.startService(intentToResponse);
+
                     Log.d("DEBUG", "The service was triggered");
                 }
             }
         } catch (Exception e) {
             Log.d("DEBUG", e.toString());
-            Toast.makeText(context, "Κάτι πήγε στραβά! " + e.toString(), Toast.LENGTH_LONG).show();
+            System.out.println(e.toString());
         }
     }
 }

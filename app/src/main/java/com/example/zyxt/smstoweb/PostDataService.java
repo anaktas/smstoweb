@@ -3,6 +3,8 @@ package com.example.zyxt.smstoweb;
 import android.app.IntentService;
 import android.content.Intent;
 import android.content.Context;
+import android.util.Log;
+import android.widget.Toast;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -88,6 +90,8 @@ public class PostDataService extends IntentService {
             final String orderType = intent.getStringExtra(ORDER_TYPE);
             final String quantity = intent.getStringExtra(QUANTITY);
 
+            Log.d("DEBUG", "Handling the intent from the service");
+
             postData(number, orderType, quantity);
         }
     }
@@ -110,37 +114,47 @@ public class PostDataService extends IntentService {
         throw new UnsupportedOperationException("Not yet implemented");
     }
 
-    private void postData(String number, String orderType, String quantity) {
-        try {
-            URL url = new URL("http://galaelass.gr/ordering/ordering.php");
+    private void postData(final String number, final String orderType, final String quantity) {
+        /*new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    URL url = new URL("http://galaelass.gr/ordering/ordering.php");
 
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
-            conn.setReadTimeout(10000);
-            conn.setConnectTimeout(15000);
-            conn.setRequestMethod("POST");
-            conn.setDoInput(true);
-            conn.setDoOutput(true);
+                    conn.setReadTimeout(10000);
+                    conn.setConnectTimeout(15000);
+                    conn.setRequestMethod("POST");
+                    conn.setDoInput(true);
+                    conn.setDoOutput(true);
 
-            Map<String, String> values = new HashMap<String, String>();
-            values.put("number", number);
-            values.put("orderType", orderType);
-            values.put("quantity", quantity);
-            values.put("source", "0");
+                    conn.connect();
 
-            OutputStream os = conn.getOutputStream();
+                    Map<String, String> values = new HashMap<String, String>();
+                    values.put("number", number);
+                    values.put("orderType", orderType);
+                    values.put("quantity", quantity);
+                    values.put("source", "0");
 
-            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
+                    OutputStream os = conn.getOutputStream();
 
-            writer.write(getQuery(values));
-            writer.flush();
-            writer.close();
+                    BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
 
-            conn.disconnect();
-        } catch(IOException e) {
-            e.printStackTrace();
-        }
+                    writer.write(getQuery(values));
+                    writer.flush();
+                    writer.close();
 
+                    conn.disconnect();
+                } catch(IOException e) {
+                    Log.d("DEBUG", e.toString());
+                    e.printStackTrace();
+                }
+            }
+        }).start();*/
+
+        SenPostReqAsyncTask senPostReqAsyncTask = new SenPostReqAsyncTask();
+        senPostReqAsyncTask.execute(number, orderType, quantity);
     }
 
     private String getQuery(Map<String, String> values) throws UnsupportedEncodingException {

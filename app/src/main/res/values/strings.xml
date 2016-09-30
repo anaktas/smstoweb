@@ -1,5 +1,5 @@
 <resources>
     <string name="app_name">SMSToWeb</string>
-    <string name="toggle_on_name">ΕΝΕΡΓΟΠΟΙΗΣΗ</string>
-    <string name="toggle_off_name">ΑΠΕΝΕΡΓΟΠΟΙΗΣΗ</string>
+    <string name="toggle_on_name">ΑΠΕΝΕΡΓΟΠΟΙΗΣΗ</string>
+    <string name="toggle_off_name">ΕΝΕΡΓΟΠΟΙΗΣΗ</string>
 </resources>
