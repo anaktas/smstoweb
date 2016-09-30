@@ -4,6 +4,17 @@ import android.app.IntentService;
 import android.content.Intent;
 import android.content.Context;
 
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * An {@link IntentService} subclass for handling asynchronous task requests in
  * a service on a separate handler thread.
@@ -20,6 +31,10 @@ public class PostDataService extends IntentService {
     // TODO: Rename parameters
     private static final String EXTRA_PARAM1 = "com.example.zyxt.smstoweb.extra.PARAM1";
     private static final String EXTRA_PARAM2 = "com.example.zyxt.smstoweb.extra.PARAM2";
+
+    public static final String INCOMING_NUMBER = "";
+    public static final String ORDER_TYPE = "";
+    public static final String QUANTITY = "";
 
     public PostDataService() {
         super("PostDataService");
@@ -68,6 +83,12 @@ public class PostDataService extends IntentService {
                 final String param2 = intent.getStringExtra(EXTRA_PARAM2);
                 handleActionBaz(param1, param2);
             }
+
+            final String number = intent.getStringExtra(INCOMING_NUMBER);
+            final String orderType = intent.getStringExtra(ORDER_TYPE);
+            final String quantity = intent.getStringExtra(QUANTITY);
+
+            postData(number, orderType, quantity);
         }
     }
 
@@ -87,5 +108,57 @@ public class PostDataService extends IntentService {
     private void handleActionBaz(String param1, String param2) {
         // TODO: Handle action Baz
         throw new UnsupportedOperationException("Not yet implemented");
+    }
+
+    private void postData(String number, String orderType, String quantity) {
+        try {
+            URL url = new URL("http://galaelass.gr/ordering/ordering.php");
+
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+
+            conn.setReadTimeout(10000);
+            conn.setConnectTimeout(15000);
+            conn.setRequestMethod("POST");
+            conn.setDoInput(true);
+            conn.setDoOutput(true);
+
+            Map<String, String> values = new HashMap<String, String>();
+            values.put("number", number);
+            values.put("orderType", orderType);
+            values.put("quantity", quantity);
+            values.put("source", "0");
+
+            OutputStream os = conn.getOutputStream();
+
+            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
+
+            writer.write(getQuery(values));
+            writer.flush();
+            writer.close();
+
+            conn.disconnect();
+        } catch(IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private String getQuery(Map<String, String> values) throws UnsupportedEncodingException {
+        StringBuilder result = new StringBuilder();
+        boolean first = true;
+
+        for(String myKey : values.keySet()) {
+            String myVal = values.get(myKey);
+
+            if (first)
+                first = false;
+            else
+                result.append("&");
+            result.append(URLEncoder.encode(myKey, "UTF-8"));
+            result.append("=");
+            result.append(URLEncoder.encode(myVal, "UTF-8"));
+        }
+
+        return result.toString();
     }
 }
